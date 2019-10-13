@@ -5,6 +5,17 @@ import random
 KPU_WIDTH, KPU_HEIGHT = 1280, 1024
 
 
+def handle_events():
+    global running
+    events = get_events()
+    for event in events:
+        if event.type == SDL_QUIT:
+            running = False
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            running = False
+    pass
+
+
 def move(p1, p2, p3, p4):
     global frame
     global direction
@@ -18,14 +29,16 @@ def move(p1, p2, p3, p4):
         y = ((-t ** 3 + 2 * t ** 2 - t) * p1[1] + (3 * t ** 3 - 5 * t ** 2 + 2) * p2[1] + (
                 -3 * t ** 3 + 4 * t ** 2 + t) * p3[1] + (t ** 3 - t ** 2) * p4[1]) / 2
         clear_canvas()
+        kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
         if cx > x:
             direction = 1
         elif cx < x:
             direction = 0
-        kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
+
         character.clip_draw(frame * 100, 100 * direction, 100, 100, x, y)
         frame = (frame + 1) % 8
-        delay(0.05)
+        delay(0.01)
+        handle_events()
         update_canvas()
 
 
@@ -51,6 +64,7 @@ def drill_6_8_1(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10):
     move(p8, p9, p10, p1)
     # draw p10-p1
     move(p9, p10, p1, p2)
+    handle_events()
     pass
 
 
@@ -72,4 +86,7 @@ points9 = [random.randint(300, 800), random.randint(300, 800)]
 points10 = [random.randint(300, 800), random.randint(300, 800)]
 
 while running:
+    clear_canvas()
     drill_6_8_1(points1, points2, points3, points4, points5, points6, points7, points8, points9, points10)
+
+close_canvas()
