@@ -101,8 +101,8 @@ while running:
         ball.update()
     grass.draw()
     update_canvas()
+    delay(0.02)
 
-    delay(0.03)
 
 close_canvas()
 
