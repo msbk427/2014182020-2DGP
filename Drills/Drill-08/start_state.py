@@ -1,6 +1,6 @@
 import game_framework
-from pico2d import *
 import title_state
+from pico2d import *
 
 
 name = "StartState"
@@ -16,12 +16,13 @@ def enter():
 
 def exit():
     global image
-    del image
+    del(image)
     pass
 
 
 def update():
     global logo_time
+
     if logo_time > 1.0:
         logo_time = 0
         # game_framework.quit()
@@ -46,10 +47,12 @@ def handle_events():
     pass
 
 
-def pause(): pass
+def pause():
+    pass
 
 
-def resume(): pass
+def resume():
+    pass
 
 
 
