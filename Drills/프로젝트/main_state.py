@@ -7,8 +7,7 @@ import game_framework
 import game_world
 
 from boy import Boy
-from grass import Grass
-from ball import Ball
+from map import Map
 
 
 name = "MainState"
@@ -19,8 +18,8 @@ grass = None
 def enter():
     global boy
     boy = Boy()
-    grass = Grass()
-    game_world.add_object(grass, 0)
+    map = Map()
+    game_world.add_object(map, 0)
     game_world.add_object(boy, 1)
 
 
