@@ -29,14 +29,18 @@ def handle_events():
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
                 game_framework.change_state(main_state)
-    pass
+                """elif event.type == SDL_MOUSEMOTION:
+                print("x=", event.x)
+                print('y=', event.y)"""
+            elif event.type == SDL_MOUSEBUTTONDOWN:
+                if 270 > event.x > 180 and 486 > event.y > 396:
+                    game_framework.change_state(main_state)
 
 
 def draw():
     clear_canvas()
-    image.draw(400, 300)
+    image.draw(400 // 2, 800 // 2)
     update_canvas()
-    pass
 
 
 def update():
