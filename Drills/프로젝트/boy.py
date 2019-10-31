@@ -3,13 +3,14 @@ from pico2d import *
 import game_world
 
 # Boy Event
-UP, DOWN, LEFT, RIGHT = range(4)
+UP, DOWN, LEFT, RIGHT, ATTACK = range(5)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT,
     (SDL_KEYDOWN, SDLK_LEFT): LEFT,
     (SDL_KEYDOWN, SDLK_UP): UP,
-    (SDL_KEYDOWN, SDLK_DOWN): DOWN
+    (SDL_KEYDOWN, SDLK_DOWN): DOWN,
+    (SDL_KEYDOWN, SDLK_SPACE) : ATTACK
 }
 
 
@@ -29,12 +30,11 @@ class IdleState:
         elif event == LEFT:
             boy.x -= 50
             boy.dir = 0
-        boy.x = clamp(50, boy.x, 750)
-        boy.y = clamp(50, boy.y, 750)
+        boy.x = clamp(50, boy.x, 700)
+        boy.y = clamp(50, boy.y, 700)
 
     @staticmethod
     def exit(boy, event):
-
         pass
 
     @staticmethod
@@ -46,14 +46,16 @@ class IdleState:
 
     @staticmethod
     def draw(boy):
-        if dir == 1:
-            boy.image.clip_draw(boy.frame * 12, 18, 12, 18, boy.x, boy.y, 50, 50)
+        if boy.dir == 1:
+            boy.image.clip_draw(boy.frame * 12, 18, 12, 18, 25 + boy.x, 25 + boy.y, 50, 50)
         else:
-            boy.image.composite_draw()
+            boy.re_image.clip_draw(160 + boy.frame * 12, 18, 12, 18, 25 + boy.x, 25 + boy.y, 50, 50)
+
+
 
 
 next_state_table = {
-    IdleState: {UP: IdleState, DOWN: IdleState, LEFT: IdleState, RIGHT: IdleState}
+    IdleState: {UP: IdleState, DOWN: IdleState, LEFT: IdleState, RIGHT: IdleState, ATTACK: IdleState}
 }
 
 
@@ -62,6 +64,7 @@ class Boy:
     def __init__(self):
         self.x, self.y = 100, 100
         self.image = load_image('warrior.png')
+        self.re_image = load_image('warrior_reverse.png')
         self.dir = 1
         self.frame = 0
         self.frame_count = 0
@@ -92,3 +95,6 @@ class Boy:
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
+
+
+

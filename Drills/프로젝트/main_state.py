@@ -8,7 +8,6 @@ import game_world
 
 from boy import Boy
 from map import Map
-from monster import Monster
 
 
 name = "MainState"
