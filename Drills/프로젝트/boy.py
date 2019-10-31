@@ -25,8 +25,10 @@ class IdleState:
             boy.y -= 50
         elif event == RIGHT:
             boy.x += 50
+            boy.dir = 1
         elif event == LEFT:
             boy.x -= 50
+            boy.dir = 0
         boy.x = clamp(50, boy.x, 750)
         boy.y = clamp(50, boy.y, 750)
 
@@ -37,17 +39,21 @@ class IdleState:
 
     @staticmethod
     def do(boy):
-        boy.frame = (boy.frame + 1) % 8
-        # fill here
+        boy.frame_count += 1
+        if boy.frame_count > 70:
+            boy.frame = (boy.frame + 1) % 8
+            boy.frame_count = 0
 
     @staticmethod
     def draw(boy):
-        boy.image.clip_draw(boy.frame * 12, 18, 12, 18, boy.x, boy.y, 50, 50)
+        if dir == 1:
+            boy.image.clip_draw(boy.frame * 12, 18, 12, 18, boy.x, boy.y, 50, 50)
+        else:
+            boy.image.composite_draw()
 
 
 next_state_table = {
-    IdleState: {UP: IdleState, DOWN: IdleState,
-                LEFT: IdleState, RIGHT: IdleState}
+    IdleState: {UP: IdleState, DOWN: IdleState, LEFT: IdleState, RIGHT: IdleState}
 }
 
 
@@ -58,6 +64,8 @@ class Boy:
         self.image = load_image('warrior.png')
         self.dir = 1
         self.frame = 0
+        self.frame_count = 0
+        self.hp = 10
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)

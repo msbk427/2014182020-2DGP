@@ -29,9 +29,9 @@ def handle_events():
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
                 game_framework.change_state(main_state)
-            elif event.type == SDL_MOUSEMOTION:
-                print("x=", event.x)
-                print('y=', event.y)
+                #elif event.type == SDL_MOUSEMOTION:
+                #print("x=", event.x)
+                #print('y=', event.y)
             elif event.type == SDL_MOUSEBUTTONDOWN:
                 if 470 > event.x > 380 and 486 > event.y > 396:
                     game_framework.change_state(main_state)

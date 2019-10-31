@@ -8,17 +8,20 @@ import game_world
 
 from boy import Boy
 from map import Map
+from monster import Monster
 
 
 name = "MainState"
 
 boy = None
-grass = None
+map = None
+
 
 def enter():
-    global boy
-    boy = Boy()
+    global boy, monster
     map = Map()
+    map.add_monster()
+    boy = Boy()
     game_world.add_object(map, 0)
     game_world.add_object(boy, 1)
 

@@ -1,8 +1,11 @@
 from pico2d import *
+from monster import Monster
 
+import game_world
+
+monster = None
 
 class Map:
-    count = 0
     image = None
 
     def __init__(self):
@@ -11,6 +14,10 @@ class Map:
 
     def update(self):
         pass
+
+    def add_monster(self):
+        monster = Monster(600, 600)
+        game_world.add_object(monster, 1)
 
     def draw(self):
         size = 16
@@ -27,5 +34,8 @@ class Map:
             fy = 0
             fx = fx + 50
             count = count + 1
+        m_count = 0
+
+
 
 
