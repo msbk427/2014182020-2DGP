@@ -84,13 +84,19 @@ def update():
             ball.stop()
         if collide(brick, ball):
             ball.stop()
-            ball.x -= brick.speed * game_framework.frame_time
+            ball.on_brick_speed = brick.speed
 
     if collide(boy, brick):
-        boy.stop()
-        boy.x -= brick.speed * game_framework.frame_time
-        boy.y = brick.y + 50
+        if boy.y_var <= 0:
+            boy.stop()
+            boy.on_brick_speed = brick.speed
+            boy.y = brick.y + 50
+
     if not collide(boy, brick):
+        if boy.is_fall == True:
+            boy.on_brick_speed = 0
+            boy.y_var = -300
+
 
 
 

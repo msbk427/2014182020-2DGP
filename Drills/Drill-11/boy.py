@@ -16,7 +16,7 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
-JUMP_HEIGHT = 200
+JUMP_HEIGHT = 300
 
 # Boy Event
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER, SPACE = range(6)
@@ -54,19 +54,21 @@ class IdleState:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-        boy.x += (boy.velocity + boy.on_brick_speed) * game_framework.frame_time
+        boy.x += boy.on_brick_speed * game_framework.frame_time
         boy.x = clamp(25, boy.x, 1600 - 25)
         boy.timer -= 1
         if boy.timer == 0:
             boy.add_event(SLEEP_TIMER)
         boy.jump_amount += boy.y_var * game_framework.frame_time
-        boy.y += boy.y_var *game_framework.frame_time
+        boy.y += boy.y_var * game_framework.frame_time
         if boy.jump_amount > JUMP_HEIGHT:
             boy.y_var *= -1
+            boy.is_fall = True
         if boy.y < 90:
             boy.y = 90
             boy.y_var = 0
-
+            boy.jump_amount = 0
+            boy.is_fall = False
 
     @staticmethod
     def draw(boy):
@@ -104,10 +106,12 @@ class RunState:
         boy.y += boy.y_var * game_framework.frame_time
         if boy.jump_amount > JUMP_HEIGHT:
             boy.y_var *= -1
+            boy.is_fall = True
         if boy.y < 90:
             boy.y = 90
             boy.y_var = 0
-
+            boy.jump_amount = 0
+            boy.is_fall = False
 
     @staticmethod
     def draw(boy):
@@ -134,23 +138,24 @@ class SleepState:
     @staticmethod
     def draw(boy):
         if boy.dir == 1:
-            boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592 / 2, '', boy.x - 25, boy.y - 25, 100, 100)
+            boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592 / 2, '', boy.x - 25, boy.y - 25,
+                                          100, 100)
         else:
-            boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592 / 2, '', boy.x + 25, boy.y - 25, 100, 100)
-
-
-
-
+            boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592 / 2, '', boy.x + 25,
+                                          boy.y - 25, 100, 100)
 
 
 next_state_table = {
-    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SLEEP_TIMER: SleepState, SPACE: IdleState},
+    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
+                SLEEP_TIMER: SleepState, SPACE: IdleState},
     RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, SPACE: RunState},
     SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, LEFT_UP: RunState, RIGHT_UP: RunState, SPACE: IdleState}
 }
 
+
 class Boy:
     image = None
+
     def __init__(self):
         self.x, self.y = 1600 // 2, 90
         # Boy is only once created, so instance image loading is fine
@@ -165,9 +170,10 @@ class Boy:
         self.y_var = 0
         self.on_brick_speed = 0
         self.jump_amount = 0
+        self.is_fall = False
 
     def get_bb(self):
-        return self.x - 20, self.y -50, self.x + 20, self.y +50
+        return self.x - 20, self.y - 50, self.x + 20, self.y + 50
 
     def add_event(self, event):
         self.event_que.insert(0, event)

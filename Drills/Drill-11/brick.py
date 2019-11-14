@@ -10,7 +10,7 @@ class Brick:
         self.speed = 150
 
     def update(self):
-        self.x -= self.speed * game_framework.frame_time
+        self.x += self.speed * game_framework.frame_time
         if self.x > 1600:
             self.speed *= -1
         elif self.x < 0:
