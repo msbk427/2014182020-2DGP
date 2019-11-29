@@ -2,12 +2,12 @@ import random
 import json
 import pickle
 import os
-
+from zombie import *
 from pico2d import *
 import game_framework
 import game_world
-
 import world_build_state
+
 
 name = "MainState"
 
@@ -58,11 +58,14 @@ def handle_events():
 
 def update():
     for game_object in game_world.all_objects():
+        if type(game_object) is Zombie:
+            if collide(boy, game_object):
+                game_world.rank_save()
+                game_framework.change_state(world_build_state)
         game_object.update()
 
-    if collide(boy, world_build_state.zombie):
-        game_world.rank_save()
-        game_framework.quit()
+
+
 
 
 def draw():

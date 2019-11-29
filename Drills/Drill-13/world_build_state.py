@@ -51,7 +51,7 @@ def create_new_world():
         zomebie_data_list = json.load(f)
 
     for data in zomebie_data_list:
-        zombie = Zombie(data['name'], data['x'], data['size'])
+        zombie = Zombie(data['name'], data['x'], data['y'], data['size'])
         game_world.add_object(zombie, 1)
 
 

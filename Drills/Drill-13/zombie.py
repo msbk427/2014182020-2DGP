@@ -88,7 +88,7 @@ class Zombie:
 
 
     def get_bb(self):
-        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+        return self.x - int(100*self.size//2), self.y - int(100*self.size//2), self.x + int(100*self.size//2), self.y + int(100*self.size//2)
 
     def update(self):
         self.bt.run()
