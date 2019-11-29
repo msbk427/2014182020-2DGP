@@ -1,9 +1,11 @@
 import pickle
+import main_state
+import game_framework
 
 # layer 0: Background Objects
 # layer 1: Foreground Objects
 objects = [[],[]]
-
+ranking = []
 
 def add_object(o, layer):
     objects[layer].append(o)
@@ -41,7 +43,9 @@ def save():
 
 def rank_save():
     with open('ranking.sav', 'wb') as f:
-        pickle.dump(objects, f)
+        pickle.dump(main_state.boy.start_time, f)
+
+
 
 def load():
     global objects

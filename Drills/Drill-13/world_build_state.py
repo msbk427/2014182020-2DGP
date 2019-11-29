@@ -87,7 +87,10 @@ def update():
 
 def draw():
     clear_canvas()
-    menu.draw(get_canvas_width()//2, get_canvas_height()//2)
+    font = load_font('ENCR10B.TTF', 40)
+    for i in range(10):
+        font.draw(get_canvas_width()//2 - 200, 900 - i*30, '(Rank %d : %3.2f )' % (i+1, game_world.ranking[i]), (0, 0, 0))
+    menu.draw(get_canvas_width()//2, get_canvas_height()//2 - 200)
     update_canvas()
 
 
